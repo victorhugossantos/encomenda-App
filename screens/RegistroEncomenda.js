@@ -3,6 +3,7 @@ import { Button, View, TextInput, Text, Alert, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import registroEncomendaStyles from "../styles/registroEncomendasStyle";
 import * as FileSystem from 'expo-file-system'
+import { readJSON, writeJSON } from "../utils/jsonUtils";
 
 const FILE_URI = FileSystem.documentDirectory + 'encomendas.json';
 
@@ -15,6 +16,8 @@ export default function RegistroEncomendaScreen({ route, navigation }) {
     const [scanning, setScanning] = useState(false);
     const [encomendas, setEncomendas] = useState([]);
 
+
+    // Solicita acesso para usar a camera
     useEffect(() => {
         (async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -33,10 +36,29 @@ export default function RegistroEncomendaScreen({ route, navigation }) {
         setScanning(false);
     };
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (!scannedData || !bloco || !unidade || !nome) {
             Alert.alert('Erro', 'Por favor, preencha todos os campos e faça a leitura do código de barras');
             return;
+        }
+
+        const newRecord = {
+            codigo_barras: scannedData,
+            nome,
+            bloco, 
+            unidade: parseInt(unidade, 10),
+            retirada: false,
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+            const data = await readJSON();
+            data.push(newRecord);
+            await writeJSON(data);
+            Alert.alert('Sucesso', 'Encomenda Registrada');
+        } catch (error) {
+            console.error('Erro ao registrar encomenda', error);
+            Alert.alert('Erro', 'Não foi possivel registrar a encomenda')
         }
 
         

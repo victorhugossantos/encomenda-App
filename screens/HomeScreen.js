@@ -7,7 +7,7 @@ import homeStyles from '../styles/homeStyles';
 export default function HomeScreen ({navigation}) {
     return(
         <View style={homeStyles.container}>
-            <Text style={homeStyles.welcomeText}>Bem-Vindo Usuario</Text>
+
             <View style={styles.buttonContainer}>
                 <Button 
                     title='Registrar Encomenda'
@@ -26,7 +26,7 @@ export default function HomeScreen ({navigation}) {
             <View style={styles.buttonContainer}>
                 <Button 
                     title='Listar Encomendas'
-                    onPress={() => navigation.navigate('Encomenda')}
+                    onPress={() => navigation.navigate('ListarEncomendas')}
                     color="#007bff"
                 />
             </View>

@@ -5,7 +5,7 @@ const loginStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingHorizontal: 20,
-        backgroundColor: '#fff', // cor de fundo clara
+        backgroundColor: '#dcdcdc', // cor de fundo clara
     },
     logo: {
         width: 350,

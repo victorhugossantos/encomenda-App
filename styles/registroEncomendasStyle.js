@@ -11,7 +11,7 @@ const registroEncomendaStyles = StyleSheet.create({
     scanner: {
         height: 200,
         width: '100%',
-        Margin: 20,
+        margin: 20,
     },
     InputField: {
         height: 50,
