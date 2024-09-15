@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
-import registroEncomendaScreen from "./screens/RegistroEncomenda";
+import RegistroEncomendaScreen from "./screens/RegistroEncomenda";
 const Stack = createStackNavigator();
 
 export default function App(){
@@ -23,9 +23,15 @@ export default function App(){
                 />
                 <Stack.Screen 
                     name='RegistrarEncomenda'
-                    component={registroEncomendaScreen}
+                    component={RegistroEncomendaScreen}
                     options={{ title: 'Registrar Encomenda'}}
                 />
+                {/* <Stack.Screen 0
+                    name='BarcodeScanner'
+                    component={BarcodeScannerScreen}
+                    options={{title: 'Scanner'}}
+                /> */}
+
             </Stack.Navigator>
         </NavigationContainer>
     );
