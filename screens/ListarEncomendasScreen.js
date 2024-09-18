@@ -1,35 +1,49 @@
-import React, {useEffect, useState} from "react";
-import { readJSON } from "../utils/jsonUtils";
-import { View, Text, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import axios from 'axios';
 import listarEncomendasStyles from "../styles/listaEncomendasStyles";
+
+const API_URL = 'http://192.168.0.7:3000/encomendas'; 
 
 export default function ListarEncomendasScreen() {
     const [encomendas, setEncomendas] = useState([]);
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(null);
     
     useEffect(() => {
-        // Carregar as encomendas do JSON
         const loadEncomendas = async () => {
             try {
-                const data = await readJSON();
-                setEncomendas(data);
+                const response = await axios.get(API_URL);
+                setEncomendas(response.data);
             } catch (error) {
-                console.error('Erro ao carregar encomendas', error)
+                setError('Erro ao carregar encomendas');
+                console.error('Erro ao carregar encomendas:', error.message);
+            } finally {
+                setLoading(false);
             }
         };
         loadEncomendas();
-    }, [])
+    }, []);
 
-    // renderiza cada item da lista
-    const renderItem = ({item}) => (
+    const renderItem = ({ item }) => (
         <View style={listarEncomendasStyles.itemContainer}>
-            <Text style={listarEncomendasStyles.itemText}>Encomenda: {item.codigo_barras}</Text>
+            <Text style={listarEncomendasStyles.itemText}>Código de Barras: {item.codigo_barras}</Text>
             <Text style={listarEncomendasStyles.itemText}>Nome: {item.nome}</Text>
             <Text style={listarEncomendasStyles.itemText}>Bloco: {item.bloco}</Text>
             <Text style={listarEncomendasStyles.itemText}>Unidade: {item.unidade}</Text>
-            <Text style={listarEncomendasStyles.itemText}>Retirado: {item.retirada ? 'Sim' : 'Não'}</Text>
-            <Text style={listarEncomendasStyles.itemText}>Data: {item.timestamp}</Text>
+            <Text style={listarEncomendasStyles.itemText}>Retirado: {item.retirado ? 'Sim' : 'Não'}</Text>
+            <Text style={listarEncomendasStyles.itemText}>Data Recebido: {item.data_recebido ? new Date(item.data_recebido).toLocaleString() : 'Não disponível'}</Text>
+            <Text style={listarEncomendasStyles.itemText}>Data Retirado: {item.data_retirado ? new Date(item.data_retirado).toLocaleString() : 'Não disponível'}</Text>
         </View>
     );
+
+    if (loading) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
+    }
+
+    if (error) {
+        return <Text style={listarEncomendasStyles.emptyText}>{error}</Text>;
+    }
 
     return (
         <View style={listarEncomendasStyles.container}>
@@ -40,5 +54,5 @@ export default function ListarEncomendasScreen() {
                 ListEmptyComponent={<Text style={listarEncomendasStyles.emptyText}>Nenhuma encomenda encontrada</Text>}
             />
         </View>
-    )
+    );
 }

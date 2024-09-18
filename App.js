@@ -5,6 +5,7 @@ import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import RegistroEncomendaScreen from "./screens/RegistroEncomenda";
 import ListarEncomendasScreen from "./screens/ListarEncomendasScreen";
+import RegistrarEntregaScreen from "./screens/RegistrarEntregaScreen";
 const Stack = createStackNavigator();
 
 export default function App(){
@@ -31,6 +32,11 @@ export default function App(){
                     name='ListarEncomendas'
                     component={ListarEncomendasScreen}
                     options={{title: 'Lista de Encomendas'}}
+                />
+                 <Stack.Screen 
+                    name='RegistrarEntrega'
+                    component={RegistrarEntregaScreen}
+                    options={{title: 'Registro de Entrega'}}
                 />
 
             </Stack.Navigator>

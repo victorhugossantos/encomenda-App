@@ -18,7 +18,7 @@ export default function HomeScreen ({navigation}) {
             <View style={styles.buttonContainer}>
                 <Button 
                     title='Registrar Entrega'
-                    onPress={() => navigation.navigate('Encomenda')}
+                    onPress={() => navigation.navigate('RegistrarEntrega')}
                     color="#007bff"
                 />
             </View>

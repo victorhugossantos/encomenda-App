@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, View, TextInput, Text, Alert, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import registroEncomendaStyles from "../styles/registroEncomendasStyle";
-import * as FileSystem from 'expo-file-system'
-import { readJSON, writeJSON } from "../utils/jsonUtils";
-
-const FILE_URI = FileSystem.documentDirectory + 'encomendas.json';
+import { registrarEncomenda } from "../api/encomendas.js";
 
 export default function RegistroEncomendaScreen({ route, navigation }) {
     const [scannedData, setScannedData] = useState('');
@@ -14,8 +11,7 @@ export default function RegistroEncomendaScreen({ route, navigation }) {
     const [nome, setNome] = useState('');
     const [hasPermission, setHasPermission] = useState(null);
     const [scanning, setScanning] = useState(false);
-    const [encomendas, setEncomendas] = useState([]);
-
+    const [files, setFiles] = useState({doc_frente: null, doc_verso: null})
 
     // Solicita acesso para usar a camera
     useEffect(() => {
@@ -42,26 +38,14 @@ export default function RegistroEncomendaScreen({ route, navigation }) {
             return;
         }
 
-        const newRecord = {
-            codigo_barras: scannedData,
-            nome,
-            bloco, 
-            unidade: parseInt(unidade, 10),
-            retirada: false,
-            timestamp: new Date().toISOString()
-        };
-
         try {
-            const data = await readJSON();
-            data.push(newRecord);
-            await writeJSON(data);
-            Alert.alert('Sucesso', 'Encomenda Registrada');
+            const encomendaData = {codigo_barras: scannedData, nome, bloco, unidade};
+            await registrarEncomenda(encomendaData);
+            Alert.alert('Sucesso', 'Encomenda registrada com sucesso! ')
         } catch (error) {
-            console.error('Erro ao registrar encomenda', error);
-            Alert.alert('Erro', 'Não foi possivel registrar a encomenda')
+            Alert.alert('Erro', 'Nao foi possivel registrar a encomenda')
         }
-
-        
+                
         // Limpar os campos após o registro
         setScannedData('');
         setBloco('');
